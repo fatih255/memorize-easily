@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  password      String
+  validate_user validate_user @default(INVALID)
+  role          Role          @default(USER)
+  cards         Card[]
+  Category      Category[]
+}
+
+model Card {
+  id         Int    @id @default(autoincrement())
+  front_text String
+  back_text  String
+  authorId   Int
+  categoryId Int
+  order      Int    @default(autoincrement())
+  author     User   @relation(fields: [authorId], references: [id])
+}
+
+model Category {
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+}
+
+enum validate_user {
+  VALID
+  INVALID
+}
+
+enum Role {
+  USER
+  ADMIN
+}

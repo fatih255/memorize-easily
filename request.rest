@@ -1,0 +1,75 @@
+
+POST http://localhost:3000/api/users/authenticate
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:3000/api/users/token
+Content-Type: application/json
+
+{
+    "id": "1",
+    "email":"test@example.com",
+    "refreshtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTY1NzU1MTA1MywiZXhwIjoxNjU4MTU1ODUzfQ.J4xV8hqs4-R8e5Y4aU9f77TMitqd1OX14HipMQk2xT8"
+}
+
+###
+
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+    "email":"test@example.com",
+    "password":"123456"
+}
+
+###
+
+
+GET http://localhost:3000/api/users/card/category/all
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTY1NzcyMTUzMiwiZXhwIjoxNjU3NzIzMzMyfQ.hdcgjCDWUtX5HZHtIQ-NuD6Xr6UR96NW9tyORWCLAiA
+Content-Type: application/json
+
+{
+    "userid":53
+}
+
+###
+
+POST http://localhost:3000/api/users/card/add
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTY1NzU1NjU0NSwiZXhwIjoxNjU3NTU4MzQ1fQ.8P5MhcRB0HXBH39xxmGWhSpLidYstu5hlbH1x4O1HzI
+Content-Type: application/json
+
+{
+    "name":"test32"
+}
+
+
+###
+
+GET http://localhost:3000/api/users/card/all
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTY1NzcyMTYxNCwiZXhwIjoxNjU3NzIzNDE0fQ.eByfQqXvwMpTuvJSh0wJ4a7DCtgxwW7FuA5RQIjyzBY
+Content-Type: application/json
+
+{
+    "userid":53
+}
+
+
+###
+
+DELETE  http://localhost:3000/api/users/card/300
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTY1ODA2Nzk2NiwiZXhwIjoxNjU4MDY5NzY2fQ.YVbvO23ASelPjspwgUcyF4Gd4ntxyePukUn2wgSaXgo
+Content-Type: application/json
+
+{
+    "userid":53
+}
+
+
+

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "AnotherUser_firstname_lastname_key" ON "AnotherUser"("firstName" text_ops,"lastName" text_ops);

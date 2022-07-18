@@ -1,16 +1,182 @@
-html,
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --display: none;
+    --pulseHoverOutline: #e5e7eb
+}
+
+
+
+html {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    display: flex;
+    justify-content: center;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+[hidden] {
+    display: none;
 }
 
-* {
-  box-sizing: border-box;
+nav div a.active {
+    color: #2563eb;
+}
+
+
+.front,
+.back {
+    box-sizing: border-box;
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, .12);
+    font-size: 2rem;
+    color: black;
+    text-align: center;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+
+.card-container {
+    position: relative;
+}
+
+.front,
+.back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    overflow: hidden;
+    transition: transform .8s ease;
+}
+
+.back {
+    transform: rotateY(180deg);
+}
+
+.card-container:hover .front {
+    transform: rotateY(-180deg);
+}
+
+.card-container:hover .back {
+    transform: rotateY(0deg);
+}
+
+.card-container {
+    perspective: 75rem;
+}
+
+.w-i {
+    width: inherit
+}
+
+
+.addcategorybtn::before {
+    content: attr(data-error);
+    display: var(--display);
+    color: 'white';
+    position: absolute;
+    top: 50%;
+    right: 75%;
+    background-color: white;
+    padding: .4rem 1rem;
+    border-radius: .3rem;
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.212);
+    color: black;
+    transform: translate(var(--x), var(--y));
+    width: max-content;
+}
+
+@keyframes leftslideout {
+    0% {
+        transform: translateX(0%);
+
+    }
+
+    100% {
+        transform: translateX(-20vw);
+
+    }
+
+}
+
+@keyframes rightslideout {
+    0% {
+        transform: translateX(-20vw);
+
+    }
+
+    100% {
+        transform: translateX(0%);
+
+    }
+
+}
+
+
+.translate-category-bar {
+    animation: leftslideout .5s ease-in-out forwards;
+
+}
+
+.translate-category-bar-reverse {
+    animation: rightslideout .5s ease-in-out forwards;
+}
+
+.front:hover {
+    animation-play-state: paused;
+    outline: 2px solid var(--pulseHoverOutline)
+}
+
+
+
+.pulse {
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
 }
