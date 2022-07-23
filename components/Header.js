@@ -1,8 +1,11 @@
+import { observer } from 'mobx-react-lite'
 import Head from 'next/head'
 import React from 'react'
 import Navbar from './Navbar'
 
-export default function Header() {
+export default observer(Header)
+
+function Header() {
     return (
         <div>
             <Head>

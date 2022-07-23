@@ -1,7 +1,7 @@
 import { observe } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useRef } from 'react'
-import { useStore } from 'storeContext';
+import { useStore } from '../store';
 
 function DragableScroll({ props, children }) {
 
@@ -10,7 +10,7 @@ function DragableScroll({ props, children }) {
 
 
     let pos = { top: 0, left: 0, x: 0, y: 0 };
-    const { response } = useStore()
+    const { response } = useStore().CardStore
 
 
     useEffect(() => {

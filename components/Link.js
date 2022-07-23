@@ -1,6 +1,7 @@
+import { observer } from 'mobx-react-lite';
 import NextLink from 'next/link';
 
-export default Link;
+export default observer(Link);
 
 function Link({ href, children, ...props }) {
     return (

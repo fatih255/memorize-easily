@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useStore } from '../storeContext';
+import { useStore } from '../store';
 import { observer } from "mobx-react-lite"
 import AddCategory from './AddCategory';
 
@@ -8,7 +8,7 @@ import Form from './Form'
 const addCard = () => {
 
 
-    const { previewCard, IsAddCard, changeIsAddCard, addedCard, editcard, useResponseMessage, updateCard } = useStore()
+    const { previewCard, IsAddCard, changeIsAddCard, addedCard, editcard, useResponseMessage, updateCard } = useStore().CardStore
 
 
 
@@ -23,11 +23,11 @@ const addCard = () => {
                 </div>
                 <div className={`${IsAddCard ? '' : 'hidden'}   flex flex-col gap-3`}>
                     <AddCategory />
-                    <h2 className="w-full text-xl font-semibold">{editcard.card !== null ? `Kartı Düzenle` : 'Yeni Kart Ekle'}</h2>
+                    <h2 className="w-full text-xl font-semibold">{editcard?.card !== null ? `Kartı Düzenle` : 'Yeni Kart Ekle'}</h2>
                     <Form
                         items={[
-                            { fieldName: 'frontText', placeholder: 'Ön', defaultValue: editcard.card !== null ? editcard.card.frontText : '' },
-                            { fieldName: 'backText', placeholder: 'Arka', defaultValue: editcard.card !== null ? editcard.card.backText : '' },
+                            { fieldName: 'frontText', placeholder: 'Ön', defaultValue: editcard?.card !== null ? editcard?.card.frontText : '' },
+                            { fieldName: 'backText', placeholder: 'Arka', defaultValue: editcard?.card !== null ? editcard?.card.backText : '' },
                         ]}
                         //validations='not-empty-all-field '
                         validations={{
@@ -35,7 +35,7 @@ const addCard = () => {
                             isEmptyField: ['Kartin Ön Yazısını Girmeyi Unututunuz', 'Kartin Arka Yazısını Girmeyi Unututunuz']
                         }}
                         button={{
-                            name: `${editcard.card !== null ? `Güncelle` : 'Ekle'}`,
+                            name: `${editcard?.card !== null ? `Güncelle` : 'Ekle'}`,
                             submitEvent: ({ validate: { isAllEmpty, isFilledAll, validationMessage, emptyFields } }) => {
 
                                 isAllEmpty && useResponseMessage('isAllEmpty', validationMessage['isAllEmpty'], 'error')
@@ -45,7 +45,7 @@ const addCard = () => {
                                 })
 
                                 if (isFilledAll) {
-                                    editcard.card !== null ? updateCard() : addedCard()
+                                    editcard?.card !== null ? updateCard() : addedCard()
 
                                 }
                             }

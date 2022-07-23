@@ -1,30 +1,31 @@
-import { info } from "autoprefixer";
-import { autorun, makeAutoObservable, runInAction } from "mobx";
-import { userService } from "services";
+import e from "cors";
+import { autorun, makeAutoObservable, reaction, runInAction } from "mobx";
 import { cardService } from "services/card.service";
 
-export class CardStore {
-
+class CardStore {
     IsAddCard = false;
     IsaddedCard = false;
     cards = [];
     categories = [];
     addCategoryNameInputText = '';
     selectedCategory;
-    activeCard;
     previewCard;
     error = {
         category_name_length: true,
         create_category: false
     }
-    response = {}
-    pending = {
-        status: false,
-        requestName: ''
+    response = {
+        actionName: '',
+        message: '',
+        type: ''
     }
     editcard = {
         card: null,
         status: false,
+    }
+    requests = {
+        getallcards: false,
+        getallcategories: false
     }
 
 
@@ -33,26 +34,47 @@ export class CardStore {
     so, you should bind function for use class variables
     this.changeIsAddCard = this.changeIsAddCard.bind(this);
      */
-
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
-        this.selectedCategory = new Category(0, 'Hepsi')
-        this.cards[this.selectedCategory.name] = []
-        this.categories = [this.selectedCategory]
 
-        this.getCategoryList()
-        this.getCardList()
 
-        autorun(() => {
-            if (this.editcard.card !== null) {
-                this.IsAddCard = true;
-                this.previewCard = this.editcard.card
-                this.selectedCategory = this.categories.find(c => c.id === this.editcard.card.categoryId)
+        reaction(
+            () => this.editcard.card,
+            card => {
+                if (card !== null) {
+                    this.IsAddCard = true;
+                    this.previewCard = this.editcard.card
+                    this.selectedCategory = this.categories.find(c => c.id === this.editcard.card.categoryId)
+                } else {
+                    this.editcard.status = true;
+                }
             }
-        })
+        )
+
+        reaction(
+            () => this.editcard.status,
+            status => {
+                if (status) {
+                    this.editcard.status = false;
+                    this.editcard.card = null;
+                    this.IsAddCard = false;
+                    this.editcard.status = true;
+                }
+            }
+        )
+
     }
 
-    // this.activeCard = (this.cards[this.selectedCategory.name] ?? [])[0];
+
+    editingCard(card) {
+        this.editcard.card = card
+    }
+
+    changeEditCardState() {
+        this.editcard.status = !this.editcard.status
+    }
+
+
     changeIsAddCard() {
         if (this.IsAddCard) {
             this.IsAddCard = false
@@ -78,8 +100,6 @@ export class CardStore {
 
 
     addCard(id, frontText, backText, categoryId, order) {
-
-
         const card = new Card(id, frontText, backText, categoryId, order)
         this.cards.push(card)
 
@@ -123,19 +143,30 @@ export class CardStore {
     // request actions
 
     //get list from db
-    getCategoryList() {
-        cardService.getAllCategories().then((cats) => {
-            runInAction(() => {
+    *getCategoryList() {
 
-                this.categories.push(...Array.from(cats, x => new Category(x.id, x.name)))
-            })
-        }).catch(err => {
+        try {
+            const categories = yield cardService.getAllCategories()
+            this.categories = [new Category(0, 'Hepsi'), ...Array.from(categories, x => new Category(x.id, x.name))]
+            this.selectedCategory = this.categories[0]
+        } catch (err) {
             console.error(err)
-        })
+        }
+
+    }
+    //get all cards list
+    *getCardList() {
+        try {
+            const cards = yield cardService.getAllCards()
+            this.cards = [...Array.from(cards, x => new Card(x.id, x.front_text, x.back_text, x.categoryId, x.order))]
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     //add category to db
     createCategory(name) {
+
         cardService.addCategory(name).then((cat) => {
             runInAction(() => {
                 const category = new Category(cat.id, cat.name)
@@ -149,20 +180,6 @@ export class CardStore {
                 this.useResponseMessage('create_category', err, 'error')
             })
 
-        })
-    }
-    //get all cards list
-    getCardList() {
-        cardService.getAllCards().then((card) => {
-            runInAction(() => {
-                this.cards.push(...Array.from(card, x => new Card(x.id, x.front_text, x.back_text, x.categoryId, x.order)))
-                //console.log(this.cards)
-                console.log(Array.from(card, x => new Card(x.id, x.front_text, x.back_text, x.categoryId, x.order)))
-            })
-        }).catch((err) => {
-            runInAction(() => {
-                console.log(err)
-            })
         })
     }
 
@@ -202,7 +219,6 @@ export class CardStore {
         cardService._updateCard(this.editcard.card.id, this.selectedCategory.id, this.previewCard.frontText, this.previewCard.backText).then((card) => {
             runInAction(() => {
                 let changedcard = this.cards.find(c => c.id === card.id)
-                console.log(changedcard)
                 changedcard.frontText = card.front_text
                 changedcard.backText = card.back_text
                 changedcard.categoryId = card.categoryId
@@ -229,7 +245,7 @@ export class CardStore {
 
 
 
-export class Card {
+class Card {
     id = null
     frontText = ''
     backText = ''
@@ -264,7 +280,7 @@ export class Card {
 
 }
 
-export class Category {
+class Category {
     id;
     name = ''
 
@@ -281,3 +297,5 @@ export class Category {
     }
 
 }
+
+export default new CardStore()

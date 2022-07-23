@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import { useStore } from 'storeContext'
+import { useStore } from 'store'
 
 function AddCategoryInput() {
 
-    const { useError, changeAddCategoryNameInputText, useErrorResetToDefault, response } = useStore()
+    const { useError, changeAddCategoryNameInputText, useErrorResetToDefault, response } = useStore().CardStore
 
     const onChangeHandler = (e) => {
         useErrorResetToDefault()

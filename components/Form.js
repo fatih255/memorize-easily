@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef } from 'react'
 
 
@@ -105,4 +106,4 @@ function Form({ items, keyUpBind, validations, contentClass, button: { name, sub
     )
 }
 
-export default Form
+export default observer(Form)

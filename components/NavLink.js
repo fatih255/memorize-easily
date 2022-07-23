@@ -1,8 +1,9 @@
+import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import Link from './Link';
 
 
-export default NavLink;
+export default observer(NavLink);
 
 
 function NavLink({ children, href, exact, ...props }) {

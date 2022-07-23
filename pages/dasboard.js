@@ -1,32 +1,24 @@
 import React, { useEffect } from 'react'
 import ToastMessage from 'components/ToastMessage'
-import { useStore } from 'storeContext'
+import { useStore } from '../store'
 import AddCard from '../components/AddCard'
 import CategoryBar from '../components/CategoryBar'
 import Card from '../components/Card'
-import { observer } from 'mobx-react-lite'
 import { AiTwotoneEdit } from 'react-icons/ai';
-import { runInAction } from 'mobx'
+
 
 function Dashboard() {
-
-    const { IsAddCard, editcard, cards, categories } = useStore()
-
+    console.log('rendered app')
+    const { changeEditCardState, getCategoryList, getCardList } = useStore().CardStore
 
     const EditCardHandler = () => {
-
-
-        if (editcard.status) {
-            runInAction(() => {
-                editcard.status = false;
-                editcard.card = null;
-                IsAddCard = false;
-            })
-        }else{
-            editcard.status = true;
-        }
-
+        changeEditCardState()
     }
+
+    useEffect(() => {
+        getCategoryList()
+        getCardList()
+    }, [])
 
     return (
         <div className="w-full">
@@ -43,4 +35,4 @@ function Dashboard() {
         </div>
     )
 }
-export default observer(Dashboard)
+export default Dashboard

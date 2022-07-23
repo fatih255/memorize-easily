@@ -1,13 +1,10 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { CardStore } from '../CardStore'
 import Header from '../components/Header'
-import { StoreProvider } from '../storeContext'
+import { StoreProvider } from '../store'
 import { userService } from 'services';
 import '../styles/globals.css'
 
-
-const store = new CardStore()
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -17,14 +14,14 @@ function MyApp({ Component, pageProps }) {
     // run auth check on initial load
     authCheck(router.asPath);
 
-
-
     // set authorized to false to hide page content while changing routes
     const hideContent = () => setAuthorized(false);
     router.events.on('routeChangeStart', hideContent);
 
     // run auth check on route change
     router.events.on('routeChangeComplete', authCheck)
+
+
 
     // unsubscribe from events in useEffect return function
     return () => {
@@ -47,11 +44,15 @@ function MyApp({ Component, pageProps }) {
     } else {
       userService.getRefreshToken()
       setAuthorized(true)
+
     }
   }
 
 
-  return <StoreProvider store={store}>
+
+
+
+  return <StoreProvider>
     <div className="flex flex-col w-screen  ">
       <Header />
       {authorized &&

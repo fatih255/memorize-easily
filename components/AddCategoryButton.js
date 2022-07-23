@@ -1,9 +1,11 @@
+import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef } from 'react'
-import { useStore } from 'storeContext'
+import { useStore } from 'store'
 
-export default function AddCategoryButton({ disable, categoryName }) {
+export default observer(AddCategoryButton)
+function AddCategoryButton({ disable, categoryName }) {
 
-    const { createCategory } = useStore()
+    const { createCategory } = useStore().CardStore
 
     const categoryButtonRef = useRef(null)
 

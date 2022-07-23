@@ -1,16 +1,16 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
-import { useStore } from '../storeContext'
+import React, { useEffect } from 'react'
+import { useStore } from '../store'
 import DragableScroll from './DragableScroll'
 
 function CategoryBar() {
 
-    const { categories, selectedCategory, changeselectedCategory, IsAddCard } = useStore()
+    const { categories, selectedCategory, changeselectedCategory, getCategoryList } = useStore().CardStore
 
     const onClickCategoryHandler = (category) => {
         changeselectedCategory(category)
     }
-
+    
     return (
 
         <div className={` w-1/6 transition-all duration-500  ease-in-out flex flex-col pl-5 text-center gap-4 py-5`}>

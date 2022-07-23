@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { fetchWrapper } from 'helpers';
 import { serverRuntimeConfig } from 'next.config';
 import jwt from 'jsonwebtoken';
+import { _resetGlobalState } from 'mobx';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/users`;
@@ -30,7 +31,7 @@ function getRefreshToken() {
                 //if the access token has expired , get new access token though refreshToken
                 return fetchWrapper.post(`${baseUrl}/token`, userService.userValue).then(user => {
                     userSubject.next(user);
-                    console.log(user)
+                   // console.log(user)
                 })
             }
 
@@ -38,7 +39,7 @@ function getRefreshToken() {
             if (!err) console.log("your access token is not expired yet")
         })
         //if not have access token please login
-    } else console.error("not have access token please login")
+    } else console.log("not have access token please login")
 
 }
 
@@ -49,6 +50,7 @@ function login(email, password) {
             // publish user to subscribers and store in local storage to stay logged in between page refreshes
             userSubject.next(user);
             localStorage.setItem('user', JSON.stringify(user));
+
         });
 }
 
@@ -56,6 +58,7 @@ function logout() {
     // remove user from local storage, publish null to user subscribers and redirect to login page
     localStorage.removeItem('user');
     userSubject.next(null);
+    _resetGlobalState()
     Router.push('/login');
 }
 

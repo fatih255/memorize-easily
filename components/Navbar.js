@@ -1,10 +1,11 @@
+import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 
 
 import { userService } from 'services';
 import NavLink from './NavLink';
 
-export default Navbar;
+export default observer(Navbar);
 
 function Navbar() {
     const [user, setUser] = useState(null);
